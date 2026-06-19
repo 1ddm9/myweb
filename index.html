@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>新火试茶 · 青年茶文化体验站</title>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: 'Ma Shan Zheng', 'ZCOOL KuaiLe', 'Noto Serif SC', cursive;
+      background: #f2ede4;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-image: url('images/bg-home.png');
+      background-size: cover;
+      background-position: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* 人物图片：宽度100%，高度自适应，从下方滑入 */
+    .character-slide {
+      position: absolute;
+      bottom: -100%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      height: auto;
+      z-index: 1;
+      animation: slideUp 1.4s ease-out 0.5s forwards;
+    }
+    @keyframes slideUp {
+      from { bottom: -100%; }
+      to   { bottom: 0; }
+    }
+
+    /* 标题和按钮卡片：人物出来后淡入 */
+    .home-card {
+      background: rgba(255,255,245,0.85);
+      backdrop-filter: blur(5px);
+      border-radius: 30px;
+      padding: 60px 80px;
+      text-align: center;
+      box-shadow: 0 20px 40px rgba(60,30,10,0.2);
+      border: 2px dashed #b9a68c;
+      position: relative;
+      z-index: 2;
+      opacity: 0;
+      animation: fadeIn 1.2s ease 2.2s forwards;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .main-title {
+      font-size: 4rem;
+      color: #4a3b2f;
+      letter-spacing: 0.3em;
+      margin-bottom: 20px;
+      text-shadow: 2px 2px 0 rgba(200,180,150,0.3);
+    }
+    .sub-title {
+      font-size: 1.3rem;
+      color: #7b6b5a;
+      margin-bottom: 50px;
+    }
+    .btn-group {
+      display: flex;
+      gap: 40px;
+      justify-content: center;
+    }
+    .btn {
+      padding: 15px 40px;
+      background: #c8b294;
+      border: 3px solid #8b6f4c;
+      color: #3e2e1f;
+      text-decoration: none;
+      font-size: 1.4rem;
+      border-radius: 60px;
+      transition: 0.3s;
+      box-shadow: 3px 3px 0 #6b5a45;
+      cursor: pointer;
+    }
+    .btn:hover {
+      background: #b39a7a;
+      box-shadow: 1px 1px 0 #6b5a45;
+      transform: translate(2px, 2px);
+    }
+  </style>
+</head>
+<body>
+  <img src="images/character.png" alt="手绘人物与茶具" class="character-slide">
+
+  <div class="home-card">
+    <div class="main-title">且将新火试新茶</div>
+    <div class="sub-title">诗酒趁年华 · 六大茶类互动体验</div>
+    <div class="btn-group">
+      <a href="experiment.html" class="btn">🍵 开始泡茶</a>
+      <a href="knowledge.html" class="btn">📖 茶知识图鉴</a>
+    </div>
+  </div>
+</body>
+</html>

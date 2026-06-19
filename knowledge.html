@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>茶知道 · 科普图鉴</title>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: 'Ma Shan Zheng', 'ZCOOL KuaiLe', 'Noto Serif SC', cursive;
+      background: url('images/bg-scroll.jpg') center/cover no-repeat fixed;
+      overflow-x: hidden;
+    }
+    .navbar {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 15px 40px;
+      background: rgba(60,40,20,0.85);
+      backdrop-filter: blur(10px);
+      color: #e5d5b7;
+    }
+    .nav-links a { color: #e5d5b7; text-decoration: none; margin-left: 30px; }
+    .container { max-width: 1200px; margin: 40px auto; padding: 0 20px; display: flex; gap: 30px; }
+    .left-panel { flex: 3; }
+    .right-panel {
+      flex: 2;
+      background: rgba(255, 255, 242, 0.85);
+      border-radius: 25px;
+      padding: 25px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      position: sticky;
+      top: 20px;
+      height: fit-content;
+    }
+    .filter-bar { margin-bottom: 30px; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
+    .filter-btn {
+      padding: 8px 25px;
+      background: rgba(229, 213, 183, 0.8);
+      border: 2px solid #8b6f4c;
+      border-radius: 25px;
+      cursor: pointer;
+      color: #3e2e1f;
+    }
+    .filter-btn.active, .filter-btn:hover { background: #c8a27a; color: white; }
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 20px;
+    }
+    .knowledge-card {
+      background: rgba(255, 255, 242, 0.85);
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+      cursor: pointer;
+      transition: 0.2s;
+      border: 2px solid transparent;
+    }
+    .knowledge-card:hover { border-color: #c8a27a; }
+    .knowledge-card.selected { border-color: #a37a52; background: rgba(253, 244, 228, 0.9); }
+    .card-icon { font-size: 2.5rem; margin-bottom: 8px; }
+    .card-title { font-size: 1.2rem; color: #4a3520; margin-bottom: 6px; }
+    .card-desc { font-size: 0.85rem; color: #6b5a4a; }
+    .detail-img {
+      width: 100%;
+      max-width: 250px;
+      border-radius: 15px;
+      margin-bottom: 15px;
+      border: 2px dashed #b9a68c;
+    }
+    .detail-text {
+      font-size: 1rem;
+      line-height: 1.8;
+      color: #4a3b2f;
+      text-align: left;
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-brand">📖 茶知道</div>
+    <div class="nav-links">
+      <a href="index.html">首页</a>
+      <a href="experiment.html">泡茶实验室</a>
+      <a href="knowledge.html" style="color:#d4af7a;">茶知道</a>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="left-panel">
+      <div class="filter-bar">
+        <button class="filter-btn active" data-filter="all">全部</button>
+        <button class="filter-btn" data-filter="teaType">六大茶类</button>
+        <button class="filter-btn" data-filter="temp">水温</button>
+        <button class="filter-btn" data-filter="method">投茶法</button>
+        <button class="filter-btn" data-filter="tool">茶具</button>
+      </div>
+      <div class="card-grid" id="cardGrid"></div>
+    </div>
+    <div class="right-panel" id="detailPanel">
+      <h3 style="color:#4a3520; margin-bottom:15px;">点击左侧卡片查看详情</h3>
+      <p style="color:#a38b6f;">这里会显示茶叶的图片和知识点哦～</p>
+    </div>
+  </div>
+
+  <script>
+    const knowledgeBase = [
+      { id: 'green', title: '绿茶', icon: '🍃', tag: 'teaType',
+        desc: '不发酵，清汤绿叶',
+        detail: '绿茶是我国产量最大的茶类，经杀青、揉捻、干燥制成，保留了鲜叶中绝大部分天然物质。代表名茶有西湖龙井、碧螺春、黄山毛峰。冲泡水温宜80-85℃，适合用玻璃杯观赏“茶舞”。',
+        img: 'images/knowledge/green.png' },
+      { id: 'white', title: '白茶', icon: '🌼', tag: 'teaType',
+        desc: '微发酵，满披白毫',
+        detail: '白茶制作工艺最自然，仅萎凋和干燥两步，不炒不揉。成品满披白毫，汤色杏黄清亮，滋味清甜醇和。代表有白毫银针、白牡丹。新茶性凉，老白茶可煮饮，有“一年茶、三年药、七年宝”之说。',
+        img: 'images/knowledge/white.png' },
+      { id: 'yellow', title: '黄茶', icon: '🌾', tag: 'teaType',
+        desc: '轻发酵，黄汤黄叶',
+        detail: '黄茶比绿茶多一道“闷黄”工艺，在湿热作用下形成黄汤黄叶的品质特征。口感比绿茶更醇和，代表有君山银针、蒙顶黄芽。',
+        img: 'images/knowledge/yellow.png' },
+      { id: 'oolong', title: '乌龙茶', icon: '🏮', tag: 'teaType',
+        desc: '半发酵，绿叶红镶边',
+        detail: '乌龙茶通过摇青、做青等工序，形成“绿叶红镶边”的独特外观，香气馥郁多变，有花果香、蜜香等。代表有铁观音、大红袍、凤凰单丛。冲泡多用紫砂壶，功夫茶泡法，沸水高冲。',
+        img: 'images/knowledge/oolong.png' },
+      { id: 'black', title: '红茶', icon: '🍂', tag: 'teaType',
+        desc: '全发酵，红汤红叶',
+        detail: '红茶在加工中发生以茶多酚酶促氧化为中心的化学反应，形成红汤红叶。代表有正山小种、祁门红茶、滇红。性温，可清饮也可加奶、糖调饮，是世界上消费量最大的茶类。',
+        img: 'images/knowledge/black.png' },
+      { id: 'dark', title: '黑茶', icon: '🪵', tag: 'teaType',
+        desc: '后发酵，越陈越香',
+        detail: '黑茶在杀青后经渥堆发酵，借助微生物作用形成独特陈香。代表有普洱熟茶、安化黑茶、六堡茶。茶性温和，去腻消食，可泡可煮，越陈越贵。',
+        img: 'images/knowledge/dark.png' },
+      { id: 'temp', title: '冲泡水温', icon: '🌡️', tag: 'temp',
+        desc: '不同茶类不同温度',
+        detail: '细嫩绿茶宜80-85℃以免烫熟；白茶、黄茶85-90℃；乌龙茶、红茶需95-100℃激发香气；黑茶必须沸水冲泡。水温恰当，方能扬长避短。',
+        img: 'images/knowledge/temp.png' },
+      { id: 'method', title: '投茶三法', icon: '🍵', tag: 'method',
+        desc: '上投、中投、下投',
+        detail: '上投法：先注水后放茶，适用于芽叶细嫩的绿茶（如碧螺春）。中投法：先注1/3水，放茶浸润，再注满水，常用于白茶、黄茶。下投法：先放茶后注水，适用于乌龙茶、红茶、黑茶等条索紧实的茶。',
+        img: 'images/knowledge/method.png' },
+      { id: 'tool', title: '常用茶具', icon: '🫖', tag: 'tool',
+        desc: '盖碗、紫砂壶、玻璃杯',
+        detail: '盖碗适合冲泡各类茶叶，方便观汤色、叶底；紫砂壶透气保温，适合乌龙茶、黑茶，久用可养壶；玻璃杯适合绿茶、黄茶，可欣赏茶叶在水中舒展的姿态。',
+        img: 'images/knowledge/tool.png' }
+    ];
+
+    const cardGrid = document.getElementById('cardGrid');
+    const detailPanel = document.getElementById('detailPanel');
+    const filterBtns = document.querySelectorAll('.filter-btn');
+
+    function renderCards(filter='all') {
+      const filtered = filter==='all' ? knowledgeBase : knowledgeBase.filter(k => k.tag === filter);
+      cardGrid.innerHTML = filtered.map(k => `
+        <div class="knowledge-card" data-id="${k.id}">
+          <div class="card-icon">${k.icon}</div>
+          <div class="card-title">${k.title}</div>
+          <div class="card-desc">${k.desc}</div>
+        </div>
+      `).join('');
+
+      document.querySelectorAll('.knowledge-card').forEach(card => {
+        card.addEventListener('click', () => {
+          document.querySelectorAll('.knowledge-card').forEach(c => c.classList.remove('selected'));
+          card.classList.add('selected');
+          const id = card.dataset.id;
+          const item = knowledgeBase.find(k => k.id === id);
+          showDetail(item);
+        });
+      });
+    }
+
+    function showDetail(item) {
+      // 不再使用 onerror，直接显示图片，若不存在会显示默认占位（浏览器自带）
+      detailPanel.innerHTML = `
+        <img src="${item.img}" alt="${item.title}" class="detail-img">
+        <h3 style="color:#4a3520;">${item.title}</h3>
+        <p class="detail-text">${item.detail}</p>
+      `;
+    }
+
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        renderCards(btn.dataset.filter);
+        detailPanel.innerHTML = '<h3>点击左侧卡片查看详情</h3><p>这里会显示茶叶的图片和知识点哦～</p>';
+      });
+    });
+
+    renderCards();
+  </script>
+</body>
+</html>
