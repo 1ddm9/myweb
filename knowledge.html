@@ -27,36 +27,19 @@
       border-radius: 25px;
       padding: 25px;
       box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      position: sticky;
-      top: 20px;
-      height: fit-content;
+      display: flex; flex-direction: column; align-items: center; text-align: center;
+      position: sticky; top: 20px; height: fit-content;
     }
     .filter-bar { margin-bottom: 30px; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
     .filter-btn {
-      padding: 8px 25px;
-      background: rgba(229, 213, 183, 0.8);
-      border: 2px solid #8b6f4c;
-      border-radius: 25px;
-      cursor: pointer;
-      color: #3e2e1f;
+      padding: 8px 25px; background: rgba(229, 213, 183, 0.8);
+      border: 2px solid #8b6f4c; border-radius: 25px; cursor: pointer; color: #3e2e1f;
     }
     .filter-btn.active, .filter-btn:hover { background: #c8a27a; color: white; }
-    .card-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 20px;
-    }
+    .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; }
     .knowledge-card {
-      background: rgba(255, 255, 242, 0.85);
-      border-radius: 20px;
-      padding: 20px;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-      cursor: pointer;
-      transition: 0.2s;
+      background: rgba(255, 255, 242, 0.85); border-radius: 20px; padding: 20px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.08); cursor: pointer; transition: 0.2s;
       border: 2px solid transparent;
     }
     .knowledge-card:hover { border-color: #c8a27a; }
@@ -64,18 +47,18 @@
     .card-icon { font-size: 2.5rem; margin-bottom: 8px; }
     .card-title { font-size: 1.2rem; color: #4a3520; margin-bottom: 6px; }
     .card-desc { font-size: 0.85rem; color: #6b5a4a; }
-    .detail-img {
-      width: 100%;
-      max-width: 250px;
-      border-radius: 15px;
-      margin-bottom: 15px;
-      border: 2px dashed #b9a68c;
-    }
-    .detail-text {
-      font-size: 1rem;
-      line-height: 1.8;
-      color: #4a3b2f;
-      text-align: left;
+    .detail-img { width: 100%; max-width: 250px; border-radius: 15px; margin-bottom: 15px; border: 2px dashed #b9a68c; }
+    .detail-text { font-size: 1rem; line-height: 1.8; color: #4a3b2f; text-align: left; }
+
+    /* 手机端适配 */
+    @media (max-width: 768px) {
+      .container { flex-direction: column; margin: 20px auto; }
+      .right-panel { position: static; margin-top: 20px; }
+      .card-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; }
+      .knowledge-card { padding: 12px; }
+      .card-icon { font-size: 1.8rem; }
+      .card-title { font-size: 1rem; }
+      .filter-btn { padding: 6px 14px; font-size: 0.85rem; }
     }
   </style>
 </head>
@@ -172,7 +155,6 @@
     }
 
     function showDetail(item) {
-      // 不再使用 onerror，直接显示图片，若不存在会显示默认占位（浏览器自带）
       detailPanel.innerHTML = `
         <img src="${item.img}" alt="${item.title}" class="detail-img">
         <h3 style="color:#4a3520;">${item.title}</h3>
