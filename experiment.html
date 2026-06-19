@@ -8,7 +8,6 @@
     * { margin:0; padding:0; box-sizing:border-box; }
     body {
       font-family: 'Ma Shan Zheng', 'ZCOOL KuaiLe', 'Noto Serif SC', cursive;
-      /* 泡茶页全局背景：bg-scroll.jpg */
       background: url('images/bg-scroll.jpg') center/cover no-repeat fixed;
       overflow-x: hidden;
     }
@@ -32,7 +31,7 @@
     }
     .scene {
       flex: 2;
-      background: rgba(255, 255, 242, 0.85); /* 半透明，露出背景 */
+      background: rgba(255, 255, 242, 0.85);
       border-radius: 30px;
       padding: 20px;
       box-shadow: 0 10px 30px rgba(0,0,0,0.1);
@@ -79,9 +78,7 @@
     .tea-item img { width: 100%; min-width: 120px; height: auto; display: block; }
     .tea-item:active { cursor: grabbing; }
 
-    .scene-img {
-      width: 200px; height: auto; user-select: none; display: block;
-    }
+    .scene-img { width: 200px; height: auto; user-select: none; display: block; }
 
     .drop-overlay {
       border: 3px dashed #a68b6f; border-radius: 20px;
@@ -117,8 +114,7 @@
 
     /* 杯内茶叶 */
     .tea-in-cup {
-      position: absolute;
-      left: 50%; top: 52%;
+      position: absolute; left: 50%; top: 52%;
       transform: translate(-50%, -50%);
       width: 80px; height: auto;
       z-index: 3; opacity: 0;
@@ -131,58 +127,51 @@
 
     /* 杯子容器 */
     .cup-wrapper {
-      position: absolute;
-      left: 42%; top: 50%;
+      position: absolute; left: 42%; top: 50%;
       transform: translate(-50%, -50%);
-      width: 200px;
-      height: 200px;
+      width: 200px; height: 200px;
     }
 
     /* 圆形水面 */
     .water-level {
-      position: absolute;
-      left: 50%;
-      top: 60%;
+      position: absolute; left: 50%; top: 60%;
       transform: translate(-50%, -50%) scale(0);
-      width: 80px;
-      height: 80px;
+      width: 80px; height: 80px;
       background: rgba(173, 216, 230, 0.55);
-      border-radius: 50%;
-      z-index: 2;
+      border-radius: 50%; z-index: 2;
       transition: transform 1.2s ease;
     }
     .water-level.active { transform: translate(-50%, -50%) scale(1); }
 
     /* 出汤场景 */
-    .pour-scene {
-      position: relative;
-      width: 100%;
-      height: 400px;
-    }
-    .source-cup, .target-cup {
-      position: absolute;
-      transition: all 0.8s ease;
-    }
-    .source-cup {
-      left: 32%;
-      top: 45%;
-      transform: translate(-50%, -50%);
-      z-index: 3;
-      cursor: pointer;
-    }
+    .pour-scene { position: relative; width: 100%; height: 400px; }
+    .source-cup, .target-cup { position: absolute; transition: all 0.8s ease; }
+    .source-cup { left: 32%; top: 45%; transform: translate(-50%, -50%); z-index: 3; cursor: pointer; }
     .source-cup img { width: 160px; }
-    .source-cup.tilt-right {
-      transform: translate(-50%, -50%) rotate(25deg);
-    }
-    .target-cup {
-      left: 65%;
-      top: 45%;
-      transform: translate(-50%, -50%);
-      z-index: 2;
-    }
-    .target-cup img {
-      width: 140px;
-      opacity: 1;
+    .source-cup.tilt-right { transform: translate(-50%, -50%) rotate(25deg); }
+    .target-cup { left: 65%; top: 45%; transform: translate(-50%, -50%); z-index: 2; }
+    .target-cup img { width: 140px; opacity: 1; }
+
+    /* 手机端适配 */
+    @media (max-width: 768px) {
+      .game-container {
+        flex-direction: column;
+        margin: 15px auto;
+        gap: 15px;
+      }
+      .scene {
+        min-height: 380px;
+        padding: 15px;
+      }
+      .side-panel {
+        padding: 15px;
+      }
+      .step-title { font-size: 1.4rem; }
+      .instruction { font-size: 1rem; }
+      .scene-img { width: 140px; }
+      .source-cup img { width: 120px; }
+      .target-cup img { width: 110px; }
+      .tea-item { width: 100px; }
     }
   </style>
 </head>
@@ -196,6 +185,7 @@
     </div>
   </nav>
 
+  <!-- 选茶界面 -->
   <div id="selectTea" class="game-container">
     <div style="width:100%; text-align:center;">
       <h2 style="color:#4a3520; margin-bottom:30px;">选一款茶，开始冲泡吧</h2>
@@ -203,6 +193,7 @@
     </div>
   </div>
 
+  <!-- 冲泡主界面 -->
   <div id="brewArea" class="game-container hidden">
     <div class="scene" id="scene"></div>
     <div class="side-panel">
@@ -216,6 +207,7 @@
     </div>
   </div>
 
+  <!-- 完成界面 -->
   <div id="completeArea" class="complete-area hidden">
     <h2>冲泡完成</h2>
     <img id="completeImg" src="" alt="成品茶" style="width:200px; margin:20px;">
@@ -397,10 +389,7 @@
           document.removeEventListener('dragover', trailHandler);
         });
 
-        function trailHandler(e) {
-          e.preventDefault();
-          spawnTrail(e.clientX, e.clientY);
-        }
+        function trailHandler(e) { e.preventDefault(); spawnTrail(e.clientX, e.clientY); }
 
         dropZone.addEventListener('dragover', e => {
           e.preventDefault(); e.dataTransfer.dropEffect = 'move'; dropZone.classList.add('hover');
@@ -425,12 +414,9 @@
             const kettle = document.createElement('img');
             kettle.src = 'images/kettle.png';
             kettle.className = 'scene-img';
-            kettle.style.position = 'absolute';
-            kettle.style.left = '60%'; kettle.style.top = '38%';
-            kettle.style.transform = 'translate(-50%,-50%)';
-            kettle.style.width = '160px';
-            kettle.style.cursor = 'pointer';
-            kettle.style.zIndex = '5';
+            kettle.style.position = 'absolute'; kettle.style.left = '60%'; kettle.style.top = '38%';
+            kettle.style.transform = 'translate(-50%,-50%)'; kettle.style.width = '160px';
+            kettle.style.cursor = 'pointer'; kettle.style.zIndex = '5';
             kettle.addEventListener('click', () => {
               kettle.style.transition = '0.3s';
               kettle.style.transform = 'translate(-50%,-50%) rotate(-30deg)';
@@ -498,9 +484,7 @@
         document.getElementById('sourceCup').addEventListener('click', function() {
           if (stepCompleted) return;
           document.getElementById('sourceCup').classList.add('tilt-right');
-          setTimeout(() => {
-            document.getElementById('targetImg').src = 'images/cup-full.png';
-          }, 400);
+          setTimeout(() => { document.getElementById('targetImg').src = 'images/cup-full.png'; }, 400);
           setTimeout(() => {
             const water = document.querySelector('#sourceCup .water-level');
             if (water) water.style.display = 'none';
@@ -525,10 +509,7 @@
       }
 
       actionBtn.onclick = () => {
-        if (!stepCompleted) {
-          alert('请先完成当前操作～');
-          return;
-        }
+        if (!stepCompleted) { alert('请先完成当前操作～'); return; }
         currentStepIndex++;
         stepCompleted = false;
         if (currentStepIndex < currentTea.steps.length) executeStep();
