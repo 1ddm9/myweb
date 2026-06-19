@@ -63,6 +63,33 @@
   </style>
 </head>
 <body>
+
+  <!-- ========== 背景音乐 ========== -->
+  <audio id="bgMusic" loop preload="auto">
+    <source src="images/bgm.mp3" type="audio/mpeg">
+  </audio>
+  <script>
+    (function() {
+      const bgMusic = document.getElementById('bgMusic');
+      // 尝试自动播放
+      bgMusic.play().then(() => {
+        console.log('自动播放成功');
+      }).catch(() => {
+        console.log('自动播放被拦截，等待用户首次交互');
+      });
+
+      // 用户第一次点击页面任意位置时，取消静音并播放
+      function startMusicOnInteraction() {
+        bgMusic.muted = false;
+        bgMusic.play().catch(() => {});
+        document.removeEventListener('click', startMusicOnInteraction);
+        document.removeEventListener('touchstart', startMusicOnInteraction);
+      }
+      document.addEventListener('click', startMusicOnInteraction);
+      document.addEventListener('touchstart', startMusicOnInteraction);
+    })();
+  </script>
+
   <nav class="navbar">
     <div class="nav-brand">📖 茶知道</div>
     <div class="nav-links">
